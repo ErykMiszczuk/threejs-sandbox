@@ -60,9 +60,16 @@ electron3.sphere.position.set(-5, 0, 0);
 electron4.sphere.position.set(-10, 0, 0);
 
 nucleus.add(electron1.pivot, electron2.pivot, electron3.pivot, electron4.pivot);
+electron1.pivot.rotation.y = -60;
+electron2.pivot.rotation.y = 30;
+electron3.pivot.rotation.z = 120;
+electron4.pivot.rotation.z = 60;
 
 function animate() {
-    electron1.pivot.rotation.z += 0.01;
+    electron1.pivot.rotation.z += 0.04;
+    electron2.pivot.rotation.z += 0.04;
+    electron3.pivot.rotation.z += 0.04;
+    electron4.pivot.rotation.z += 0.04;
     nucleus.rotation.x += 0.002;
     nucleus.rotation.y += 0.003;
     nucleus.rotation.z += 0.001;
