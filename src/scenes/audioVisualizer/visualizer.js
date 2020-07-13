@@ -1,4 +1,7 @@
-import * as THREE from '../build/three.module.js';
+import * as THREE from 'three';
+import audioFile from '../../../assets/music/your_music_here.mp3';
+import fragmentShader from './fragmentShader.frag';
+import vertexShader from './vertexShader.vert';
 
 var scene, camera, renderer, analyser, uniforms;
 
@@ -12,7 +15,7 @@ startButton.addEventListener( 'click', init );
 
 function init() {
 
-    var fftSize = 128;
+    var fftSize = 64;
 
     //
 
@@ -33,12 +36,11 @@ function init() {
 
     camera = new THREE.Camera();
 
-    //
 
     var listener = new THREE.AudioListener();
 
     var audio = new THREE.Audio( listener );
-    var file = './sounds/376737_Skullbeatz___Bad_Cat_Maste.mp3';
+    var file = audioFile;
 
     if ( /(iPad|iPhone|iPod)/g.test( navigator.userAgent ) ) {
 
@@ -61,28 +63,22 @@ function init() {
 
     analyser = new THREE.AudioAnalyser( audio, fftSize );
 
-    //
-
     uniforms = {
-
-        tAudioData: { value: new THREE.DataTexture( analyser.data, fftSize / 2, 1, THREE.LuminanceFormat ) }
-
+        tAudioData: { value: new THREE.DataTexture( analyser.data, fftSize / 2.8, 1, THREE.LuminanceFormat ) }
     };
 
     var material = new THREE.ShaderMaterial( {
-
         uniforms: uniforms,
-        vertexShader: document.getElementById( 'vertexShader' ).textContent,
-        fragmentShader: document.getElementById( 'fragmentShader' ).textContent
+        vertexShader,
+        fragmentShader,
 
     } );
 
-    var geometry = new THREE.PlaneBufferGeometry( 1, 1 );
+    var geometry = new THREE.PlaneBufferGeometry( 2, 2 );
 
     var mesh = new THREE.Mesh( geometry, material );
     scene.add( mesh );
 
-    //
 
     window.addEventListener( 'resize', onResize, false );
 

@@ -19,5 +19,9 @@
   "homepage": "https://github.com/ErykMiszczuk/threejs-sandbox#readme",
   "dependencies": {
     "three": "^0.118.3"
+  },
+  "devDependencies": {
+    "glslify-bundle": "^5.1.1",
+    "glslify-deps": "^1.3.1"
   }
 }
