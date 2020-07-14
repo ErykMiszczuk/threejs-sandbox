@@ -63,10 +63,12 @@ function init() {
 
     analyser = new THREE.AudioAnalyser( audio, fftSize );
 
+    // analyser.data is an array of values, with fftSize elements
     uniforms = {
-        tAudioData: { value: new THREE.DataTexture( analyser.data, fftSize / 2.8, 1, THREE.LuminanceFormat ) }
+        tAudioData: { value: new THREE.DataTexture( analyser.data, fftSize / 2, 1, THREE.LuminanceFormat ) }
     };
 
+    // custom material that uses shaders to create texture from analyser data
     var material = new THREE.ShaderMaterial( {
         uniforms: uniforms,
         vertexShader,
