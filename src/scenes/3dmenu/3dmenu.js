@@ -144,10 +144,10 @@ export default class Scene {
         // console.log(this.childrenArray) it is ok
 
         this.raycaster.setFromCamera(this.mouse, this.camera);
-        let intersects = this.raycaster.intersectObjects(this.childrenArray, true);
-        if (intersects > 0) {
+        let intersects = this.raycaster.intersectObjects(this.scene.children, true);
+        if (intersects.length > 0) {            
             const intersected = intersects[0].object;
-            intersected.customDepthMaterial.color = snowWhite;
+            intersected.material.color = snowWhite;
         }
     }
 }
