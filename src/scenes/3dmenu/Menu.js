@@ -3,7 +3,7 @@ import font from './fonts/helvetiker_bold.typeface.json';
 import C from 'cannon';
 import { RGBADepthPacking } from 'three';
 // const fontStringified = JSON.stringify(font);
-const margin = 6;
+const margin = 7;
 const totalMass = 1;
 const starWarsYellow = new THREE.Color("rgb(255,220,0)")
 
@@ -14,7 +14,7 @@ export default class Menu {
         this.scene = scene;
 
         this.world = world;
-        this.offset = this.navItems.length * margin * 0.5;
+        this.offset = this.navItems.length * margin * 0.3;
 
         this.fontLoader = new THREE.FontLoader();
 
@@ -69,7 +69,7 @@ export default class Menu {
 
                 mesh.size = mesh.geometry.boundingBox.getSize(new THREE.Vector3());
 
-                words.letterOff += mesh.size.x;
+                words.letterOff += mesh.size.x * 1.15;
 
                 const box = new C.Box(new C.Vec3().copy(mesh.size).scale(0.5));
 
@@ -109,6 +109,6 @@ export default class Menu {
       }
 
     getOffsetY(i) {
-        return (this.navItems.length - i - 1) * margin - this.offset;
+        return i * margin * 2;
     }
 }

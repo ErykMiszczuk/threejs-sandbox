@@ -57,7 +57,6 @@ export default class Scene {
         this.setRenderer();
         
         this.addObjects();
-        this.updateObjects();
         
         this.setCamera();
         this.setLights();
@@ -126,10 +125,6 @@ export default class Scene {
 
     addObjects() {
         this.menu = new Menu(this.scene, this.world)
-    }
-
-    updateObjects() {
-        this.childrenArray = this.scene.children[0].children[0].children;
     }
 
     updatePhysics() {
