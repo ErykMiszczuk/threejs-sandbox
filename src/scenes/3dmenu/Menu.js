@@ -64,6 +64,8 @@ export default class Menu {
                 geometry.computeBoundingSphere();
 
                 const mesh = new THREE.Mesh(geometry, material);
+                mesh.castShadow = true;
+                mesh.receiveShadow = true;
 
                 mesh.size = mesh.geometry.boundingBox.getSize(new THREE.Vector3());
 

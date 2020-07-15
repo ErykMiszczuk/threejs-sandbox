@@ -57,6 +57,7 @@ export default class Scene {
         this.setRenderer();
         
         this.addObjects();
+        this.updateObjects();
         
         this.setCamera();
         this.setLights();
@@ -80,18 +81,21 @@ export default class Scene {
     
         const foreLight = new THREE.DirectionalLight(0xffffff, 0.5);
         foreLight.position.set(5, 5, 20);
+        foreLight.castShadow = true;
         this.scene.add(foreLight);
     
         const backLight = new THREE.DirectionalLight(0xffffff, 1);
         backLight.position.set(-5, -5, -10);
+        backLight.castShadow = true;
         this.scene.add(backLight);
     }
 
     setRenderer() {
         this.renderer = new THREE.WebGLRenderer({
             antialias: true,
-            canvas: this.container
+            canvas: this.container,
         });
+        this.renderer.shadowMap.enabled = true;
     
         this.renderer.setClearColor(0x202533);
         this.renderer.setSize(this.W, this.H);
@@ -125,7 +129,7 @@ export default class Scene {
     }
 
     updateObjects() {
-        this.childrenArray = this.scene.children[0];
+        this.childrenArray = this.scene.children[0].children[0].children;
     }
 
     updatePhysics() {
@@ -134,11 +138,13 @@ export default class Scene {
     }
 
     findMousePointedObjects() {
-        this.camera.lookAt(this.scene.position)
+        this.camera.lookAt(this.scene.position);
         this.camera.updateMatrixWorld();
 
+        // console.log(this.childrenArray) it is ok
+
         this.raycaster.setFromCamera(this.mouse, this.camera);
-        let intersects = this.raycaster.intersectObjects(this.scene.children, true);
+        let intersects = this.raycaster.intersectObjects(this.childrenArray, true);
         if (intersects > 0) {
             const intersected = intersects[0].object;
             intersected.customDepthMaterial.color = snowWhite;
