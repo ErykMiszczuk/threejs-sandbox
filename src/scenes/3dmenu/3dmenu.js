@@ -1,5 +1,10 @@
 import * as THREE from 'three';
+import * as R from 'ramda';
 import Menu from './Menu.js';
+import C from 'cannon';
+
+const starWarsYellow = new THREE.Color("rgb(255,220,0)");
+const snowWhite = new THREE.Color("rgb(255, 255, 255)");
 
 export default class Scene {
 
@@ -8,6 +13,10 @@ export default class Scene {
     
         this.W = window.innerWidth;
         this.H = window.innerHeight;
+
+        this.mouse = new THREE.Vector2()
+        this.INTERSECTED;
+        this.raycaster = new THREE.Raycaster();
     
         this.setup();
         this.bindEvents();
@@ -17,19 +26,40 @@ export default class Scene {
         window.addEventListener("resize", () => {
             this.onResize();
         });
+        window.addEventListener( 'mousemove', event => {
+            event.preventDefault();
+            this.updateMouse(event);
+        });
+    }
+
+    onCanvasMouseMove(event) {
+        console.log(arguments)
+        event.preventDefault();
+
+        this.updateMouse(event);
+    }
+
+    updateMouse(event) {
+        this.mouse.x = (event.clientX / this.W) * 2 - 1;
+        this.mouse.y = - (event.clientY / this.H) * 2 + 1;
     }
 
     setup() {
+
+        this.world = new C.World();
+        this.world.gravity.set(0, -50, 0);
+
         this.scene = new THREE.Scene();
         this.scene.fog = new THREE.Fog(0x202533, -1, 100);
 
         this.clock = new THREE.Clock();
 
+        this.setRenderer();
+        
+        this.addObjects();
+        
         this.setCamera();
         this.setLights();
-        this.setRenderer();
-
-        this.addObjects();
 
         this.renderer.setAnimationLoop(() => this.draw())
     }
@@ -85,10 +115,33 @@ export default class Scene {
     }
 
     draw() {
+        this.updatePhysics();
+        this.findMousePointedObjects();
         this.renderer.render(this.scene, this.camera);
     }
 
     addObjects() {
-        this.menu = new Menu(this.scene)
+        this.menu = new Menu(this.scene, this.world)
+    }
+
+    updateObjects() {
+        this.childrenArray = this.scene.children[0];
+    }
+
+    updatePhysics() {
+        this.menu.update();
+        this.world.step(1 / 60);
+    }
+
+    findMousePointedObjects() {
+        this.camera.lookAt(this.scene.position)
+        this.camera.updateMatrixWorld();
+
+        this.raycaster.setFromCamera(this.mouse, this.camera);
+        let intersects = this.raycaster.intersectObjects(this.scene.children, true);
+        if (intersects > 0) {
+            const intersected = intersects[0].object;
+            intersected.customDepthMaterial.color = snowWhite;
+        }
     }
 }

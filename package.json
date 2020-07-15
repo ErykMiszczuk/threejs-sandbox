@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/ErykMiszczuk/threejs-sandbox#readme",
   "dependencies": {
+    "cannon": "^0.6.2",
+    "ramda": "^0.27.0",
     "three": "^0.118.3"
   },
   "devDependencies": {
