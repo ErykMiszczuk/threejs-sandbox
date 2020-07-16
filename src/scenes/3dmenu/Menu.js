@@ -36,6 +36,16 @@ export default class Menu {
     }
 
     setup(f) {
+
+        const groundMat = new C.Material();
+        const letterMat = new C.Material();
+
+        const contactMaterial = new C.ContactMaterial(groundMat, letterMat, {
+            friction: 0.01
+        })
+
+        this.world.addContactMaterial(contactMaterial);
+
         const fontOption = {
             font: f,
             size: 3,
@@ -57,7 +67,8 @@ export default class Menu {
             words.ground = new C.Body({
                 mass: 0,
                 shape: new C.Box(new C.Vec3(50, 0.1, 50)),
-                position: new C.Vec3(0, i * margin - this.offset, 0)
+                position: new C.Vec3(0, i * margin - this.offset, 0),
+                material: groundMat
             });
       
             this.world.addBody(words.ground);
@@ -81,7 +92,8 @@ export default class Menu {
 
                 mesh.body = new C.Body({
                     mass: totalMass / innerText.length,
-                    position: new C.Vec3(words.letterOff, this.getOffsetY(i), 0)
+                    position: new C.Vec3(words.letterOff, this.getOffsetY(i), 0),
+                    material: letterMat
                 });
 
                 const { center } = mesh.geometry.boundingSphere;
