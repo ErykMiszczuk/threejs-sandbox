@@ -99,6 +99,8 @@ export default class Menu {
             this.words.add(words);
             this.scene.add(this.words);
         })
+
+        this.setContrains()
     }
 
     onClickHandler() {
@@ -139,14 +141,31 @@ export default class Menu {
         if (!this.words.children) return;
     
         this.words.children.forEach((word, j) => {
-          for (let i = 0; i < word.children.length; i++) {
-            const letter = word.children[i];
-    
-            letter.position.copy(letter.body.position);
-            letter.quaternion.copy(letter.body.quaternion);
-          }
+            for (let i = 0; i < word.children.length; i++) {
+                const letter = word.children[i];
+        
+                letter.position.copy(letter.body.position);
+                letter.quaternion.copy(letter.body.quaternion);
+            }
         });
-      }
+    }
+
+    setContrains() {
+        this.words.children.forEach(word => {
+            word.children.map((letter, i) => {
+                const nextLetter = i === word.children.length - 1 ? null : word.children[i + 1];
+                if (nextLetter === null) return;
+
+                const c = new C.ConeTwistConstraint(letter.body, nextLetter.body, {
+                    pivotA: new C.Vec3(letter.size.x, 0, 0),
+                    pivotB: new C.Vec3(0, 0, 0)
+                })
+
+                c.collideConnected = true;
+                this.world.addConstraint(c);
+            })
+        })
+    }
 
     getOffsetY(i) {
         return i * margin * 2;
