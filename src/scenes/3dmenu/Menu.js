@@ -1,17 +1,22 @@
 import * as THREE from 'three';
 import font from './fonts/helvetiker_bold.typeface.json';
 import C from 'cannon';
-import { RGBADepthPacking } from 'three';
+import * as R from 'ramda';
 // const fontStringified = JSON.stringify(font);
 const margin = 7;
 const totalMass = 1;
+const force = 25;
 const starWarsYellow = new THREE.Color("rgb(255,220,0)")
 
 export default class Menu {
-    constructor(scene, world) {
+    constructor(scene, world, camera, mouse, raycaster) {
         this.navItems = document.querySelectorAll(".mainNav a")
 
         this.scene = scene;
+
+        this.camera = camera;
+        this.mouse = mouse;
+        this.raycaster = raycaster;
 
         this.world = world;
         this.offset = this.navItems.length * margin * 0.3;
@@ -27,6 +32,7 @@ export default class Menu {
         // this.fontLoader.load(fontStringified, f => {
         //     this.setup(f)
         // });
+        document.addEventListener("click", () => this.onClickHandler())
     }
 
     setup(f) {
@@ -93,6 +99,40 @@ export default class Menu {
             this.words.add(words);
             this.scene.add(this.words);
         })
+    }
+
+    onClickHandler() {
+        this.raycaster.setFromCamera(this.mouse, this.camera);
+
+        // calculate objects intersecting the picking ray
+        // It will return an array with intersecting objects
+        const intersects = this.raycaster.intersectObjects(
+            this.scene.children,
+            true
+        );
+
+        if (intersects.length > 0) {
+            const obj = R.head(intersects);
+            const { object, face } = obj;
+
+            if (!object.isMesh) return;
+
+            const impulse = new THREE.Vector3()
+            .copy(face.normal)
+            .negate()
+            .multiplyScalar(force);
+
+            this.words.children.forEach((word, i) => {
+                word.children.forEach(letter => {
+                    const { body } = letter;
+
+                    if (letter !== object) return;
+
+                    // We apply the vector 'impulse' on the base of our body
+                    body.applyLocalImpulse(impulse, new C.Vec3());
+                });
+            });
+        }
     }
 
     update() {

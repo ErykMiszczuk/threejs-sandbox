@@ -55,11 +55,11 @@ export default class Scene {
         this.clock = new THREE.Clock();
 
         this.setRenderer();
+        this.setCamera();
+        this.setLights();
         
         this.addObjects();
         
-        this.setCamera();
-        this.setLights();
 
         this.renderer.setAnimationLoop(() => this.draw())
     }
@@ -124,7 +124,7 @@ export default class Scene {
     }
 
     addObjects() {
-        this.menu = new Menu(this.scene, this.world)
+        this.menu = new Menu(this.scene, this.world, this.camera, this.mouse, this.raycaster)
     }
 
     updatePhysics() {
