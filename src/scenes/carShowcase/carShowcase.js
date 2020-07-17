@@ -28,6 +28,8 @@ export default class Scene {
         this.setupCamera();
         this.setupLights();
         this.setupObjects();
+
+        this.setupEventListeners();
     }
 
     setupRenderer() {
@@ -39,6 +41,8 @@ export default class Scene {
         this.renderer.setSize(this.Width, this.Height);
         this.renderer.setPixelRatio(this.PixelRatio);
         this.renderer.setClearColor(colors.skyBlue);
+
+        this.renderer.outputEncoding = THREE.sRGBEncoding;
 
         document.body.appendChild(this.renderer.domElement)
 
@@ -65,7 +69,7 @@ export default class Scene {
 
     setupCamera() {
         this.camera = new THREE.PerspectiveCamera(50, this.AspectRatio, this.NearPlane, this.FarPlane);
-        this.camera.position.set(10, 10, -10);
+        this.camera.position.set(-20, 10, -50);
         this.camera.lookAt(new THREE.Vector3());
     }
 
@@ -73,7 +77,21 @@ export default class Scene {
         this.carObject = new Car(this.scene);
     }
 
+    setupEventListeners() {
+        window.addEventListener("resize", () => this.onResize())
+    }
+
     draw() {
         this.renderer.render(this.scene, this.camera);
+    }
+
+    onResize() {
+        this.Width = window.innerWidth;
+        this.Height = window.innerHeight;
+        this.PixelRatio = window.devicePixelRatio;
+        this.AspectRatio = this.Width / this.Height;
+
+        this.camera.updateProjectionMatrix();
+        this.renderer.setSize(this.Width, this.Height);
     }
 }
