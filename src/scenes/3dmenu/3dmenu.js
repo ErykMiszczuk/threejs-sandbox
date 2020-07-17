@@ -100,7 +100,6 @@ export default class Scene {
         this.renderer.setSize(this.W, this.H);
         this.renderer.setPixelRatio(window.devicePixelRatio);
     
-        this.renderer.shadowMap.enabled = true;
     
         this.renderer.setAnimationLoop(() => {
             this.draw();
