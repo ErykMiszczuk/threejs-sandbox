@@ -4,6 +4,8 @@ import C from 'cannon';
 
 import colors from './colors.js';
 
+import Car from './Objects/Car.js';
+
 export default class Scene {
 
     constructor() {
@@ -17,14 +19,15 @@ export default class Scene {
         this.FarPlane = 1000;
 
         // prepare to draw scene
-        this.setup();
+        this.create();
     }
 
-    setup() {
+    create() {
         this.setupRenderer();
         this.setupScene();
         this.setupCamera();
         this.setupLights();
+        this.setupObjects();
     }
 
     setupRenderer() {
@@ -64,6 +67,10 @@ export default class Scene {
         this.camera = new THREE.PerspectiveCamera(50, this.AspectRatio, this.NearPlane, this.FarPlane);
         this.camera.position.set(10, 10, -10);
         this.camera.lookAt(new THREE.Vector3());
+    }
+
+    setupObjects() {
+        this.carObject = new Car(this.scene);
     }
 
     draw() {
