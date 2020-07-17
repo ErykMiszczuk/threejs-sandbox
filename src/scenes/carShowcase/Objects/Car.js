@@ -18,7 +18,6 @@ export default class Car {
                 const model = loadedModel.scene.children[0];
                 model.rotateZ(90);
                 model.castShadow = true;
-                console.log(model);
                 this.parentScene.add(model)
             },
             progress => this.loadProgress = progress,

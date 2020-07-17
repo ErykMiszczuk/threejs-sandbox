@@ -41,6 +41,9 @@ export default class Scene {
         this.renderer.setSize(this.Width, this.Height);
         this.renderer.setPixelRatio(this.PixelRatio);
         this.renderer.setClearColor(colors.skyBlue);
+        // set tone mapping
+        this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        this.renderer.toneMappingExposure = 1;
 
         this.renderer.outputEncoding = THREE.sRGBEncoding;
 
