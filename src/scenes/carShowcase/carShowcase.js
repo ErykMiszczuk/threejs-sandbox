@@ -47,6 +47,10 @@ export default class Scene {
 
         this.renderer.outputEncoding = THREE.sRGBEncoding;
 
+        // pmrem generator
+        this.pmremGenerator = new THREE.PMREMGenerator(this.renderer);
+        this.pmremGenerator.compileEquirectangularShader();
+
         document.body.appendChild(this.renderer.domElement)
 
         //start drawing loop
@@ -77,7 +81,7 @@ export default class Scene {
     }
 
     setupObjects() {
-        this.carObject = new Car(this.scene);
+        this.carObject = new Car(this.scene, this.pmremGenerator);
     }
 
     setupEventListeners() {
