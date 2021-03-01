@@ -22,7 +22,7 @@
     "parcel-plugin-static-files-copy": "^2.4.3",
     "ramda": "^0.27.0",
     "static": "^2.0.0",
-    "three": "^0.118.3"
+    "three": "^0.125.0"
   },
   "devDependencies": {
     "glslify-bundle": "^5.1.1",
